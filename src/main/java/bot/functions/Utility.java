@@ -1,7 +1,6 @@
 package bot.functions;
 
 import bot.DiscordBot;
-import bot.Enviroment;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
@@ -17,8 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Utility
-{
-    static ArrayList<Permission> everything = new ArrayList<>(Arrays.asList(Permission.values()));
+{}
+    /*static ArrayList<Permission> everything = new ArrayList<>(Arrays.asList(Permission.values()));
 
     //debug commands
     private static final ArrayList<CommandData> debugCommandArrayList;
@@ -242,4 +241,4 @@ public class Utility
             guild.updateCommands().addCommands(commandArrayList).queue();
         }
     }
-}
+}*/

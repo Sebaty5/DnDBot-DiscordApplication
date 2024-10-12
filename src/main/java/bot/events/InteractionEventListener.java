@@ -8,7 +8,7 @@ import bot.functions.Debug;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 public class InteractionEventListener extends ListenerAdapter
-{
+{/*
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event)
     {
@@ -48,5 +48,5 @@ public class InteractionEventListener extends ListenerAdapter
                 event.reply("This should not have happened").setEphemeral(true).queue();
             }
         }
-    }
+    }*/
 }
