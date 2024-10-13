@@ -10,7 +10,6 @@ import de.sebaty5.penandpaperbot.logging.StandardLogger;
 import java.util.HashMap;
 import java.util.Map;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.EventListener;

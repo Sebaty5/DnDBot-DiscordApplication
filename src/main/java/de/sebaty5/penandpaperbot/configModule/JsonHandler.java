@@ -33,7 +33,6 @@ public abstract class JsonHandler<T> {
     protected final ReentrantReadWriteLock.WriteLock writeLock;
     protected final long saveDelay;
 
-    private Thread saveChecker = null;
     private boolean init = false;
     private T data = null;
 
@@ -69,7 +68,10 @@ public abstract class JsonHandler<T> {
 
             this.init = true;
             File file = new File(this.configFilePath.toString());
-            if (file.getParentFile() != null) file.getParentFile().mkdirs();
+            if (!(file.getParentFile() != null && file.getParentFile().mkdirs())) {
+                LOGGER.error("Failed to create config file directory.");
+                System.exit(ExitCode.CONFIG_ERROR.getCode());
+            }
             Files.createDirectories(this.configFilePath.getParent());
 
             this.data = readFile(this.configFilePath, this.dataClass).orElseGet(() -> {
@@ -77,8 +79,8 @@ public abstract class JsonHandler<T> {
                 return this.dataFactory.get();
             });
 
-            this.saveChecker = new Thread(this::saveCheck);
-            this.saveChecker.start();
+            Thread saveChecker = new Thread(this::saveCheck);
+            saveChecker.start();
         } finally {
             this.writeLock.unlock();
         }
