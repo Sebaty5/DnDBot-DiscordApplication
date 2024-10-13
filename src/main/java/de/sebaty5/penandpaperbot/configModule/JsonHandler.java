@@ -1,8 +1,8 @@
-package configModule;
+package de.sebaty5.penandpaperbot.configModule;
 
-import logging.StandardLogger;
+import de.sebaty5.penandpaperbot.logging.StandardLogger;
+import de.sebaty5.penandpaperbot.utility.ExitCode;
 import org.jetbrains.annotations.NotNull;
-import utility.ExitCode;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

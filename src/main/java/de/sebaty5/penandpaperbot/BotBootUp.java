@@ -1,12 +1,15 @@
-import configModule.Config;
-import configModule.Localization;
-import logging.StandardLogger;
+package de.sebaty5.penandpaperbot;
 
+import de.sebaty5.penandpaperbot.commandModule.CommandRegistry;
+import de.sebaty5.penandpaperbot.configModule.Config;
+import de.sebaty5.penandpaperbot.configModule.Localization;
+import de.sebaty5.penandpaperbot.logging.StandardLogger;
+
+import de.sebaty5.penandpaperbot.utility.ExitCode;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import utility.ExitCode;
 
 import java.io.IOException;
 
@@ -52,6 +55,6 @@ public class BotBootUp {
     }
     public static void main(String[] args)
     {
-
+        CommandRegistry.initialize();
     }
 }

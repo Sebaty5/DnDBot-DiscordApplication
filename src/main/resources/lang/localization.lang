@@ -1,1 +1,16 @@
+#vanity effects
 activity.watching=over the inn
+
+#command descriptions and denotations
+cmd.ping.desc=Ping to bot for response time testing.
+cmd.campaignCreation.desc=Creates a new unique campaign category. Also adds dedicated roles.
+cmd.campaignCreation.name.desc=The name for the new campaign.
+
+#message replies
+msg.commandNotFound=The command you are looking for is not registered. Check in with the developer if you think this is an error.
+
+msg.campaignCreation.missingArgument.name=An error occurred during campaign creation. Missing campaign name argument.
+msg.campaignCreation.duplicate.campaign=An error occurred during campaign creation. Campaign with name %s already exists.
+msg.campaignCreation.duplicate.role=An error occurred during campaign creation. Role with name %s already exists.
+msg.campaignCreation.duplicate.category=An error occurred during campaign creation. Category with name %s already exists.
+msg.campaignCreation.success=Campaign was created.

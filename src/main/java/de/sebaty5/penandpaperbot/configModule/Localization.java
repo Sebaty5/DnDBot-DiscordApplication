@@ -1,6 +1,6 @@
-package configModule;
+package de.sebaty5.penandpaperbot.configModule;
 
-import logging.StandardLogger;
+import de.sebaty5.penandpaperbot.logging.StandardLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;

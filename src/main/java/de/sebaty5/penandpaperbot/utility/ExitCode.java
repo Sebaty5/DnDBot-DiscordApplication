@@ -1,7 +1,8 @@
-package utility;
+package de.sebaty5.penandpaperbot.utility;
 
 public enum ExitCode {
     CONFIG_ERROR(2),
+    LOGIC_ERROR(3),
     UNDEFINED_TOKEN(14),
     ;
 
