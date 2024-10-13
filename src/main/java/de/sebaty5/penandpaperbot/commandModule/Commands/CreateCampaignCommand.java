@@ -1,6 +1,5 @@
 package de.sebaty5.penandpaperbot.commandModule.Commands;
 
-import bot.functions.FunctionResponse;
 import de.sebaty5.penandpaperbot.commandModule.Command;
 import de.sebaty5.penandpaperbot.configModule.Localization;
 import net.dv8tion.jda.api.Permission;
@@ -18,10 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CreateCampaignCommand implements Command {
-    @Override
-    public String getName() {
-        return "createCampaign";
-    }
 
     @Override
     public SlashCommandData getData() {

@@ -9,10 +9,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class PingCommand implements Command {
     @Override
-    public String getName() {
-        return "ping";
-    }
-    @Override
     public SlashCommandData getData() {
         return Commands.slash("ping", Localization.translate("cmd.ping.desc"));
     }
