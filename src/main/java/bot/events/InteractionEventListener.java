@@ -1,6 +1,6 @@
 package bot.events;
 
-import bot.functions.Utility;
+
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -22,12 +22,12 @@ public class InteractionEventListener extends ListenerAdapter
             case "debug-delete" ->
             {
                 Debug.deleteAllCommands();
-                event.reply("deleted all guild commands").setEphemeral(true).queue();
+                event.reply("deleted all guild de.sebaty5.pnpbot.commands").setEphemeral(true).queue();
             }
             case "debug-force-update" ->
             {
                 Utility.updateCommands();
-                event.reply("updated all guild commands").setEphemeral(true).queue();
+                event.reply("updated all guild de.sebaty5.pnpbot.commands").setEphemeral(true).queue();
             }
             case "create-new-campaign" ->
             {
