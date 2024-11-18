@@ -67,12 +67,20 @@ public abstract class JsonHandler<T> {
             LOGGER.log("Reading %s...", this.configFilePath.getFileName().toString());
 
             this.init = true;
-            File file = new File(this.configFilePath.toString());
-            if (!(file.getParentFile() != null && file.getParentFile().mkdirs())) {
-                LOGGER.error("Failed to create config file directory.");
-                System.exit(ExitCode.CONFIG_ERROR.getCode());
+
+            File folder = new File(this.configFilePath.getParent().toString());
+            if(!folder.exists()) {
+                File file = new File(this.configFilePath.toString());
+                if (!(file.getParentFile() != null && file.getParentFile().mkdirs())) {
+                    LOGGER.error("Failed to create config file directory.");
+                    System.exit(ExitCode.CONFIG_ERROR.getCode());
+                }
+                Files.createDirectories(this.configFilePath.getParent());
+            } else {
+                LOGGER.log("Config folder was already created.");
             }
-            Files.createDirectories(this.configFilePath.getParent());
+
+
 
             this.data = readFile(this.configFilePath, this.dataClass).orElseGet(() -> {
                 this.needsSaving.set(true);
