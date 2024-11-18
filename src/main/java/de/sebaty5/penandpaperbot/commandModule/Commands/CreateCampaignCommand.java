@@ -13,10 +13,57 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashSet;
 
 public class CreateCampaignCommand implements Command {
+
+    private static final HashSet<Permission> everything = new HashSet<>(EnumSet.allOf(Permission.class));
+
+
+    private static final HashSet<Permission> grantedPermissions    = new HashSet<>();
+    static {
+        grantedPermissions.add(Permission.VIEW_CHANNEL);
+        grantedPermissions.add(Permission.MESSAGE_SEND);
+        grantedPermissions.add(Permission.MESSAGE_SEND_IN_THREADS);
+        grantedPermissions.add(Permission.MESSAGE_EMBED_LINKS);
+        grantedPermissions.add(Permission.MESSAGE_ATTACH_FILES);
+        grantedPermissions.add(Permission.MESSAGE_ADD_REACTION);
+        grantedPermissions.add(Permission.MESSAGE_HISTORY);
+        grantedPermissions.add(Permission.MESSAGE_SEND_POLLS);
+        grantedPermissions.add(Permission.VOICE_CONNECT);
+        grantedPermissions.add(Permission.VOICE_SPEAK);
+        grantedPermissions.add(Permission.VOICE_STREAM);
+        grantedPermissions.add(Permission.VOICE_USE_VAD);
+    }
+
+
+    private static final HashSet<Permission> grantedPermissionsDM  = new HashSet<>(grantedPermissions);
+    static {
+        grantedPermissionsDM.add(Permission.MANAGE_CHANNEL);
+        grantedPermissionsDM.add(Permission.MANAGE_PERMISSIONS);
+        grantedPermissionsDM.add(Permission.CREATE_PUBLIC_THREADS);
+        grantedPermissionsDM.add(Permission.CREATE_PRIVATE_THREADS);
+        grantedPermissionsDM.add(Permission.MESSAGE_MANAGE);
+        grantedPermissionsDM.add(Permission.MANAGE_THREADS);
+        grantedPermissionsDM.add(Permission.VOICE_MUTE_OTHERS);
+        grantedPermissionsDM.add(Permission.VOICE_DEAF_OTHERS);
+        grantedPermissionsDM.add(Permission.VOICE_MOVE_OTHERS);
+        grantedPermissionsDM.add(Permission.MESSAGE_MENTION_EVERYONE);
+        grantedPermissionsDM.add(Permission.VOICE_SET_STATUS);
+        grantedPermissionsDM.add(Permission.PRIORITY_SPEAKER);
+    }
+
+
+    private static final HashSet<Permission> deniedPermissions = new HashSet<>(everything);
+    static {
+        deniedPermissions.removeAll(grantedPermissions);
+    }
+
+    private static final HashSet<Permission> deniedPermissionsDM = new HashSet<>(everything);
+    static {
+        deniedPermissionsDM.removeAll(grantedPermissionsDM);
+    }
 
     @Override
     public SlashCommandData getData() {
@@ -41,60 +88,17 @@ public class CreateCampaignCommand implements Command {
 
     private boolean createCampaign(String campaignName, Guild guild, SlashCommandInteractionEvent event)
     {
-        ArrayList<Permission> everything = new ArrayList<>(Arrays.asList(Permission.values()));
-
-        ArrayList<Permission> grantedPermissions    = new ArrayList<>();
-        grantedPermissions.add(Permission.VIEW_CHANNEL);
-        grantedPermissions.add(Permission.MESSAGE_SEND);
-        grantedPermissions.add(Permission.MESSAGE_SEND_IN_THREADS);
-        grantedPermissions.add(Permission.MESSAGE_EMBED_LINKS);
-        grantedPermissions.add(Permission.MESSAGE_ATTACH_FILES);
-        grantedPermissions.add(Permission.MESSAGE_ADD_REACTION);
-        grantedPermissions.add(Permission.MESSAGE_EXT_EMOJI);
-        grantedPermissions.add(Permission.MESSAGE_EXT_STICKER);
-        grantedPermissions.add(Permission.MESSAGE_HISTORY);
-        grantedPermissions.add(Permission.VOICE_CONNECT);
-        grantedPermissions.add(Permission.VOICE_SPEAK);
-        grantedPermissions.add(Permission.VOICE_STREAM);
-        grantedPermissions.add(Permission.VOICE_USE_VAD);
-        grantedPermissions.add(Permission.VOICE_START_ACTIVITIES);
-
-        ArrayList<Permission> grantedPermissionsDM  = new ArrayList<>(grantedPermissions);
-        grantedPermissionsDM.add(Permission.MANAGE_CHANNEL);
-        grantedPermissionsDM.add(Permission.MANAGE_PERMISSIONS);
-        grantedPermissionsDM.add(Permission.MANAGE_WEBHOOKS);
-        grantedPermissionsDM.add(Permission.CREATE_PUBLIC_THREADS);
-        grantedPermissionsDM.add(Permission.CREATE_PRIVATE_THREADS);
-        grantedPermissionsDM.add(Permission.MESSAGE_MANAGE);
-        grantedPermissionsDM.add(Permission.MANAGE_THREADS);
-        grantedPermissionsDM.add(Permission.VOICE_MUTE_OTHERS);
-        grantedPermissionsDM.add(Permission.VOICE_DEAF_OTHERS);
-        grantedPermissionsDM.add(Permission.VOICE_MOVE_OTHERS);
-        grantedPermissionsDM.add(Permission.MANAGE_EVENTS);
-
-        ArrayList<Permission> deniedPermissionsDM   = new ArrayList<>(Arrays.asList(Permission.values()));
-        deniedPermissionsDM.removeAll(grantedPermissionsDM);
-
-        ArrayList<Permission> deniedPermissions     = new ArrayList<>(Arrays.asList(Permission.values()));
-        deniedPermissionsDM.removeAll(grantedPermissionsDM);
-
-
-
-
         if(canCreateRole(campaignName, guild, event) && canCreateRole(campaignName + "DM", guild, event) && canCreateCategory(campaignName, guild, event)) {
-            createRole(campaignName, guild);
-            createRole(campaignName + "DM", guild);
-            createCategory(campaignName, guild);
-
-            Category category = guild.getCategoriesByName(campaignName, true).get(0);
-            Role role = guild.getRolesByName(campaignName, true).get(0);
-            Role roleDM = guild.getRolesByName(campaignName + "DM", true).get(0);
-
+            Role role = createRole(campaignName, guild);
+            Role roleDM = createRole(campaignName + "DM", guild);
+            Category category = createCategory(campaignName, guild);
             category.getManager()
-                    .putPermissionOverride(guild.getPublicRole(),null, everything)
-                    .putPermissionOverride(role,grantedPermissions, deniedPermissions)
-                    .putPermissionOverride(roleDM,grantedPermissionsDM, deniedPermissionsDM)
+                    .putPermissionOverride(role, grantedPermissions, deniedPermissions)
+                    .putPermissionOverride(roleDM, grantedPermissionsDM, deniedPermissionsDM)
+                    .putPermissionOverride(guild.getPublicRole(), null, everything)
                     .complete();
+
+
             return true;
         }
         return false;
@@ -124,14 +128,14 @@ public class CreateCampaignCommand implements Command {
         return false;
     }
 
-    public static void createCategory(String categoryName, Guild guild)
+    public static Category createCategory(String categoryName, Guild guild)
     {
-        guild.createCategory(categoryName).complete();
+         return guild.createCategory(categoryName).complete();
     }
 
-    public static void createRole(String roleName, Guild guild)
+    public static Role createRole(String roleName, Guild guild)
     {
-        guild.createRole()
+        return guild.createRole()
                 .setName(roleName)
                 .setColor(Color.LIGHT_GRAY)
                 .setPermissions(0L)
